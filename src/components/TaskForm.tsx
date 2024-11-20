@@ -4,18 +4,21 @@ import styled from "styled-components";
 import { useState } from "react";
 
 interface TaskFormProps {
-  onSubmit: (title: string) => void;
+  onSubmit: (title: string, dueDate?: string) => void;
   initialTitle?: string;
+  initialDueDate?: string;
 }
 
-const TaskForm = ({ onSubmit, initialTitle = "" }: TaskFormProps) => {
+const TaskForm = ({ onSubmit, initialTitle = "", initialDueDate = "" }: TaskFormProps) => {
   const [title, setTitle] = useState(initialTitle);
+  const [dueDate, setDueDate] = useState(initialDueDate);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (title.trim()) {
-      onSubmit(title.trim());
+      onSubmit(title.trim(), dueDate || undefined);
       setTitle("");
+      setDueDate("");
     }
   };
 
@@ -27,6 +30,11 @@ const TaskForm = ({ onSubmit, initialTitle = "" }: TaskFormProps) => {
         value={title}
         onChange={(e) => setTitle(e.target.value)}
       />
+      <Input
+        type="date"
+        value={dueDate}
+        onChange={(e) => setDueDate(e.target.value)}
+      />
       <Button type="submit">Save</Button>
     </Form>
   );
@@ -36,6 +44,7 @@ export default TaskForm;
 
 const Form = styled.form`
   display: flex;
+  gap: 8px;
   margin-bottom: 16px;
 `;
 
@@ -44,7 +53,6 @@ const Input = styled.input`
   padding: 8px;
   border: 1px solid #ddd;
   border-radius: 4px;
-  margin-right: 8px;
 `;
 
 const Button = styled.button`
@@ -54,4 +62,8 @@ const Button = styled.button`
   padding: 8px 16px;
   border-radius: 4px;
   cursor: pointer;
+
+  &:hover {
+    background-color: #005bb5;
+  }
 `;
